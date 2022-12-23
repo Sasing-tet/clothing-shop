@@ -1,24 +1,21 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Product } from '../../models';
 import { ClothingShopContext } from '../Context';
 import { ProductCard } from '../ProductCard';
 import { ProductsWrapper, Title, CheckoutButton } from './Wishlist.styled';
 
 export const Wishlist = () => {
-  const { products, total } = useContext(ClothingShopContext);
+  const [clear, setClear] = useState([]);
+  const { saved } = useContext(ClothingShopContext);
+
   return (
     <>
-      <Title>Your cart total is {total}.00$</Title>
+      <Title>{saved.length} {saved.length > 1 ? "items" : "Item"} in your wishlist currently</Title>
       <ProductsWrapper>
-      {products.map((product: Product, index) => (
+      {saved.map((product: Product, index) => (
           <ProductCard {...product} key={index} />
         ))}
       </ProductsWrapper>
-      {products.length > 0 && (
-      <CheckoutButton>
-        Checkout
-      </CheckoutButton>)
-      }
     </>
   );
 };

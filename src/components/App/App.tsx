@@ -1,12 +1,23 @@
-import { Link, Route, Routes } from 'react-router-dom';
-import { LinksWrapper, TitleWrapper, Wrapper } from './App.styled';
+import { Link, Route, Routes } from "react-router-dom";
+import { LinksWrapper, TitleWrapper, Wrapper } from "./App.styled";
 
-import { Wishlist } from '../Wishlist';
-import { Products } from '../Products';
-import { useReducer } from 'react';
-import { Product } from '../../models';
-import { shopReducer, initialState, add, remove, update } from '../Reducer';
-import { ClothingShopContext } from '../Context';
+import { Wishlist } from "../Wishlist";
+import { Cart } from "../Cart";
+import { Products } from "../Products";
+import { useReducer } from "react";
+import { Product } from "../../models";
+import {
+  shopReducer,
+  initialState,
+  add,
+  remove,
+  update,
+  addQty,
+  erase,
+  save,
+  totalItems,
+} from "../Reducer";
+import { ClothingShopContext } from "../Context";
 
 export const App = () => {
   const [state, dispatch] = useReducer(shopReducer, initialState);
@@ -29,33 +40,66 @@ export const App = () => {
 
   const updatePrice = (products: [] = []) => {
     let total = 0;
-    products.forEach((product: { price: number; }) => (total = total + product.price));
+    products.forEach(
+      (product: { price: number }) => (total = total + product.price)
+    );
 
     dispatch(update(total));
   };
+
+  const addToWishlist = (product: Product) => {
+    const updatedCart = state.saved.concat(product);
+    dispatch(save(updatedCart));
+  };
+
+  const removeFromWishlist = (product: Product) => {
+    const updatedCart = state.saved.filter(
+      (currentProduct: Product) => currentProduct.name !== product.name
+    );
+    dispatch(erase(updatedCart));
+  };
+
+
+  const updateCart = (product: Product, quantity: number) => {
+    const updatedCart = state.products.map((items: { name: string }) =>
+      items.name === product.name ? { ...items, quantity: quantity } : items
+    );
+    dispatch(addQty(updatedCart));
+
+    updatePrice(updatedCart);
+  };
+
   const value = {
+    totalitems: state.totalitems,
     total: state.total,
     products: state.products,
+    saved: state.saved,
     addToCart,
-    removeFromCart
-  }
+    removeFromCart,
+    addToWishlist,
+    removeFromWishlist,
+    updatePrice,
+    updateCart,
+  };
   return (
     <ClothingShopContext.Provider value={value}>
-    <Wrapper>
-      <TitleWrapper>
-        <h1>Clothing Shop Starter Project</h1>
-      </TitleWrapper>
-      <LinksWrapper>
-        <Link to='/'>Home</Link>
-        <Link to='/wishlist'>Wishlist</Link>
-        <Link to='/checkout'>Checkout</Link>
-      </LinksWrapper>
-      <Routes>
-        <Route path='/' element={<Products />} />
-        <Route path='/wishlist' element={<Wishlist />} />
-        <Route path='/checkout' element={<Wishlist />} />
-      </Routes>
-    </Wrapper>
+      <Wrapper>
+        <TitleWrapper>
+          <h1>Clothing Shop Starter Project</h1>
+        </TitleWrapper>
+        <LinksWrapper>
+          <Link to="/">Home</Link>
+          <Link to="/wishlist">Wishlist</Link>
+          <Link to="/cart">Cart</Link>
+          <Link to="/checkout">Checkout</Link>
+        </LinksWrapper>
+        <Routes>
+          <Route path="/" element={<Products />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Wishlist />} />
+        </Routes>
+      </Wrapper>
     </ClothingShopContext.Provider>
   );
 };

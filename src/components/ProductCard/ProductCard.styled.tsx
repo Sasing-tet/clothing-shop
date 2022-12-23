@@ -8,6 +8,10 @@ type AddButtonProps = {
   isInCart: boolean;
 };
 
+type AddButtonPropsWish = {
+  isInWish: boolean;
+};
+
 export const Wrapper = styled.div<WrapperProps>`
   display: grid;
   align-items: flex-end;
@@ -32,6 +36,32 @@ export const AddButton = styled.div<AddButtonProps>`
   width: 20px;
   height: 20px;
   background: ${(props) => (props.isInCart ? '#E55336' : '#60c95d')};
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+
+  :hover {
+    transform: scale(1.2);
+    transition: 1s;
+  }
+
+  p {
+    font-size: 20px;
+    margin: 0;
+    color: white;
+  }
+`;
+
+export const AddButton2 = styled.div<AddButtonPropsWish>`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 20px;
+  right: 60px;
+  width: 20px;
+  height: 20px;
+  background: ${(props) => (props.isInWish ? '#E55336' : '#60c95d')};
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
