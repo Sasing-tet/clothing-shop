@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+
+export const TitleWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(2, auto);
+`;
+
 export const Title = styled.p`
   font-weight: bold;
   font-size: 20px;
@@ -14,12 +21,12 @@ export const ProductsWrapper = styled.div`
 `;
 
 export const CheckoutButton = styled.button`
-  display: block;
   margin: auto;
-  width: 200px;
+  width: 100px;
   background-color: transparent;
   padding: 10px;
   border-radius: 8px;
+  decoration: none;
   transition: 0.3s;
   :hover {
     color: white;

@@ -8,7 +8,7 @@ export const Checkout = () => {
   const { products, total } = useContext(ClothingShopContext);
   return (
     <>
-      <Title>Your cart total is {total}.00$</Title>
+      <Title>test</Title>
       <ProductsWrapper>
       {products.map((product: Product, index) => (
           <ProductCard {...product} key={index} />

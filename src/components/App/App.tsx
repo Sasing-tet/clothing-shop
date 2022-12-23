@@ -18,6 +18,7 @@ import {
   totalItems,
 } from "../Reducer";
 import { ClothingShopContext } from "../Context";
+import { Checkout } from "../Checkout";
 
 export const App = () => {
   const [state, dispatch] = useReducer(shopReducer, initialState);
@@ -40,11 +41,14 @@ export const App = () => {
 
   const updatePrice = (products: [] = []) => {
     let total = 0;
+    let items = 0;
     products.forEach(
-      (product: { price: number }) => (total = total + product.price)
+      (product: { price: number; quantity: number }) =>
+        (total = total + product.price * product.quantity , items = items + product.quantity)
     );
 
     dispatch(update(total));
+    dispatch(totalItems(items));
   };
 
   const addToWishlist = (product: Product) => {
@@ -97,7 +101,7 @@ export const App = () => {
           <Route path="/" element={<Products />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Wishlist />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Wrapper>
     </ClothingShopContext.Provider>
